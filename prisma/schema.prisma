@@ -1,0 +1,95 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Movie {
+  id            Int      @id
+  title         String
+  overview      String
+  releaseDate   DateTime
+  posterPath    String?
+  backdropPath  String?
+  popularity    Float
+  voteAverage   Float
+  voteCount     Int
+  
+  // Many-to-many relationships
+  genres        MovieGenre[]
+  actors        MovieActor[]
+  directors     MovieDirector[]
+  
+  @@map("movies")
+}
+
+model Genre {
+  id      Int    @id
+  name    String
+  
+  // Many-to-many relationship with movies
+  movies  MovieGenre[]
+  
+  @@map("genres")
+}
+
+model Actor {
+  id      Int    @id
+  name    String
+  
+  // Many-to-many relationship with movies
+  movies  MovieActor[]
+  
+  @@map("actors")
+}
+
+model Director {
+  id      Int    @id
+  name    String
+  
+  // Many-to-many relationship with movies
+  movies  MovieDirector[]
+  
+  @@map("directors")
+}
+
+// Junction tables for many-to-many relationships
+model MovieGenre {
+  movieId Int
+  genreId Int
+  
+  movie   Movie @relation(fields: [movieId], references: [id], onDelete: Cascade)
+  genre   Genre @relation(fields: [genreId], references: [id], onDelete: Cascade)
+  
+  @@id([movieId, genreId])
+  @@map("movie_genres")
+}
+
+model MovieActor {
+  movieId Int
+  actorId Int
+  
+  movie   Movie @relation(fields: [movieId], references: [id], onDelete: Cascade)
+  actor   Actor @relation(fields: [actorId], references: [id], onDelete: Cascade)
+  
+  @@id([movieId, actorId])
+  @@map("movie_actors")
+}
+
+model MovieDirector {
+  movieId    Int
+  directorId Int
+  
+  movie      Movie @relation(fields: [movieId], references: [id], onDelete: Cascade)
+  director   Director @relation(fields: [directorId], references: [id], onDelete: Cascade)
+  
+  @@id([movieId, directorId])
+  @@map("movie_directors")
+}

@@ -21,7 +21,7 @@ export default function Component() {
           <Link href="#" className="text-sm font-medium hover:text-blue-400 transition-colors">
             Home
           </Link>
-          <Link href="#" className="text-sm font-medium hover:text-blue-400 transition-colors">
+          <Link href="/movies" className="text-sm font-medium hover:text-blue-400 transition-colors">
             Movies
           </Link>
           <Link href="#pricing" className="text-sm font-medium hover:text-blue-400 transition-colors">
@@ -64,13 +64,15 @@ export default function Component() {
                     <Film className="w-4 h-4 mr-2" />
                     Start Watching
                   </Button>
-                  <Button
-                    variant="outline"
-                    size="lg"
-                    className="border-slate-600 text-slate-300 hover:bg-slate-800 bg-transparent"
-                  >
-                    Browse Movies
-                  </Button>
+                  <Link href="/movies">
+                    <Button
+                      variant="outline"
+                      size="lg"
+                      className="border-slate-600 text-slate-300 hover:bg-slate-800 bg-transparent"
+                    >
+                      Browse Movies
+                    </Button>
+                  </Link>
                 </div>
               </div>
               <div className="mx-auto aspect-video overflow-hidden rounded-xl lg:order-last">
