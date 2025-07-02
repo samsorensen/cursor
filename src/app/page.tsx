@@ -292,13 +292,15 @@ export default function Component() {
                 >
                   Start Your Free Trial
                 </Button>
-                <Button
-                  variant="outline"
-                  size="lg"
-                  className="border-slate-600 text-slate-300 hover:bg-slate-800 bg-transparent"
-                >
-                  Browse Movies
-                </Button>
+                <Link href="/movies">
+                  <Button
+                    variant="outline"
+                    size="lg"
+                    className="border-slate-600 text-slate-300 hover:bg-slate-800 bg-transparent"
+                  >
+                    Browse Movies
+                  </Button>
+                </Link>
               </div>
             </div>
           </div>
