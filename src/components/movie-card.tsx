@@ -1,7 +1,8 @@
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Movie } from "@/types/movie"
-import { Star } from "lucide-react"
+import { Star, Film } from "lucide-react"
+import Image from "next/image"
 
 interface MovieCardProps {
   movie: Movie
@@ -9,8 +10,34 @@ interface MovieCardProps {
 }
 
 export function MovieCard({ movie, highlightGenre }: MovieCardProps) {
+  const posterUrl = movie.posterPath 
+    ? `https://image.tmdb.org/t/p/w500${movie.posterPath}`
+    : null
+
   return (
-    <Card className="bg-slate-800/50 border-slate-700 text-white hover:bg-slate-800/70 transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/10 group">
+    <Card className="bg-slate-800/50 border-slate-700 text-white hover:bg-slate-800/70 transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/10 group overflow-hidden">
+      {/* Movie Poster */}
+      <div className="relative aspect-[2/3] overflow-hidden">
+        {posterUrl ? (
+          <Image
+            src={posterUrl}
+            alt={`${movie.title} poster`}
+            fill
+            className="object-cover group-hover:scale-105 transition-transform duration-300"
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          />
+        ) : (
+          <div className="w-full h-full bg-gradient-to-br from-slate-700 to-slate-800 flex items-center justify-center">
+            <Film className="h-12 w-12 text-slate-500" />
+          </div>
+        )}
+        {/* Rating Badge */}
+        <div className="absolute top-2 right-2 bg-black/70 backdrop-blur-sm rounded-full px-2 py-1 flex items-center gap-1">
+          <Star className="h-3 w-3 text-yellow-400 fill-current" />
+          <span className="text-xs font-medium text-white">{movie.voteAverage.toFixed(1)}</span>
+        </div>
+      </div>
+
       <CardHeader className="pb-3">
         <CardTitle className="text-lg font-semibold text-white group-hover:text-blue-300 transition-colors line-clamp-2">
           {movie.title}
@@ -18,11 +45,7 @@ export function MovieCard({ movie, highlightGenre }: MovieCardProps) {
         <div className="flex items-center gap-2 text-sm text-slate-400">
           <span>{movie.releaseDate.toLocaleDateString()}</span>
           <span>•</span>
-          <div className="flex items-center gap-1">
-            <Star className="h-3 w-3 text-yellow-400 fill-current" />
-            <span>{movie.voteAverage.toFixed(1)}</span>
-            <span className="text-slate-500">({movie.voteCount})</span>
-          </div>
+          <span className="text-slate-500">({movie.voteCount} votes)</span>
         </div>
       </CardHeader>
       

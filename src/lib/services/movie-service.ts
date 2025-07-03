@@ -5,7 +5,15 @@ export class MovieService {
   static async getTopRatedMovies(limit: number = 10): Promise<Movie[]> {
     return db.movie.findMany({
       take: limit,
-      include: {
+      select: {
+        id: true,
+        title: true,
+        overview: true,
+        releaseDate: true,
+        voteAverage: true,
+        voteCount: true,
+        posterPath: true,
+        backdropPath: true,
         genres: {
           include: {
             genre: true
@@ -39,7 +47,15 @@ export class MovieService {
           }
         }
       },
-      include: {
+      select: {
+        id: true,
+        title: true,
+        overview: true,
+        releaseDate: true,
+        voteAverage: true,
+        voteCount: true,
+        posterPath: true,
+        backdropPath: true,
         genres: {
           include: {
             genre: true

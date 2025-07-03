@@ -26,6 +26,8 @@ export interface Movie {
   releaseDate: Date
   voteAverage: number
   voteCount: number
+  posterPath?: string | null
+  backdropPath?: string | null
   genres: MovieGenre[]
   actors: MovieActor[]
   directors: MovieDirector[]
