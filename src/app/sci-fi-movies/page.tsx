@@ -1,12 +1,12 @@
 import { MovieGrid } from '@/components/movie-grid'
 import { MovieService } from '@/lib/services/movie-service'
 import { Badge } from "@/components/ui/badge"
-import { Film, Star, Rocket } from "lucide-react"
+import { Film, Rocket, Star } from "lucide-react"
 import Link from "next/link"
 
-export default async function MoviesPage() {
-  // Fetch top rated movies
-  const movies = await MovieService.getTopRatedMovies(10)
+export default async function SciFiMoviesPage() {
+  // Fetch science fiction movies
+  const sciFiMovies = await MovieService.getSciFiMovies()
 
   return (
     <div className="flex flex-col min-h-screen bg-gradient-to-b from-slate-900 to-slate-800 text-white">
@@ -20,7 +20,7 @@ export default async function MoviesPage() {
         </Link>
         <div className="ml-auto flex items-center gap-2">
           <Film className="h-6 w-6 text-blue-400" />
-          <span className="text-sm font-medium text-slate-300">Top Rated Movies</span>
+          <span className="text-sm font-medium text-slate-300">Science Fiction Movies</span>
         </div>
       </header>
 
@@ -31,15 +31,18 @@ export default async function MoviesPage() {
           <div className="container mx-auto px-4 md:px-6 relative z-10">
             <div className="flex flex-col items-center justify-center space-y-3 text-center">
               <div className="space-y-2">
-                <Badge variant="secondary" className="w-fit bg-blue-500/20 text-blue-300 border-blue-500/30">
+                <Badge
+                  variant="secondary"
+                  className="w-fit bg-blue-500/20 text-blue-300 border-blue-500/30"
+                >
                   <Star className="w-3 h-3 mr-1" />
-                  Highest Rated
+                  Sci-Fi Collection
                 </Badge>
                 <h1 className="text-2xl font-bold tracking-tighter sm:text-4xl bg-gradient-to-r from-white to-slate-300 bg-clip-text text-transparent">
-                  Top Rated Movies
+                  Science Fiction Movies
                 </h1>
                 <p className="max-w-[600px] text-slate-300 text-sm md:text-base">
-                  Discover the most critically acclaimed films from our collection.
+                  Explore the universe of science fiction cinema.
                 </p>
               </div>
             </div>
@@ -49,11 +52,14 @@ export default async function MoviesPage() {
         {/* Movies Grid Section */}
         <section className="w-full py-8 bg-slate-800/50">
           <div className="container mx-auto px-4 md:px-6">
-            <MovieGrid 
-              movies={movies}
-              emptyMessage="No movies found."
+            <MovieGrid
+              movies={sciFiMovies}
+              highlightGenre="Science Fiction"
+              emptyMessage="No science fiction movies found."
               showCount={true}
-              countLabel={`Found ${movies.length} top-rated movie${movies.length !== 1 ? 's' : ''}`}
+              countLabel={`Found ${sciFiMovies.length} science fiction movie${
+                sciFiMovies.length !== 1 ? "s" : ""
+              }`}
             />
           </div>
         </section>
@@ -61,7 +67,9 @@ export default async function MoviesPage() {
 
       {/* Footer */}
       <footer className="flex flex-col gap-2 sm:flex-row py-6 w-full shrink-0 items-center px-4 md:px-6 border-t border-slate-700/50 bg-slate-900/80">
-        <p className="text-xs text-slate-400">© {new Date().getFullYear()} SciFi Stream. All rights reserved.</p>
+        <p className="text-xs text-slate-400">
+          © {new Date().getFullYear()} SciFi Stream. All rights reserved.
+        </p>
         <div className="sm:ml-auto flex flex-col sm:flex-row gap-4 sm:gap-6 items-center">
           <p className="text-xs text-slate-400">
             Movie data provided by{" "}
@@ -77,5 +85,5 @@ export default async function MoviesPage() {
         </div>
       </footer>
     </div>
-  )
+  );
 } 

@@ -24,6 +24,9 @@ export default function Component() {
           <Link href="/movies" className="text-sm font-medium hover:text-blue-400 transition-colors">
             Movies
           </Link>
+          <Link href="/sci-fi-movies" className="text-sm font-medium hover:text-blue-400 transition-colors">
+            Sci-Fi Movies
+          </Link>
           <Link href="#pricing" className="text-sm font-medium hover:text-blue-400 transition-colors">
             Pricing
           </Link>
