@@ -1,6 +1,7 @@
 import { Star } from "lucide-react"
 import { Movie } from "@/types/movie"
 import { SecureImage } from "./secure-image"
+import Link from "next/link"
 
 interface MovieCardProps {
   movie: Movie
@@ -21,12 +22,14 @@ export function MovieCard({ movie }: MovieCardProps) {
         {/* Dark overlay on hover */}
         <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10" />
         {/* READ MORE Button on hover */}
-        <button
-          className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-[#f20034] hover:bg-[#d1002d] text-white font-bold rounded-full px-8 py-3 text-base shadow-lg transition-all duration-200 z-20 tracking-wide opacity-0 group-hover:opacity-100 whitespace-nowrap"
-          tabIndex={-1}
-        >
-          READ MORE
-        </button>
+        <Link href={`/movies/${movie.id}`}>
+          <button
+            className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-[#f20034] hover:bg-[#d1002d] text-white font-bold rounded-full px-8 py-3 text-base shadow-lg transition-all duration-200 z-20 tracking-wide opacity-0 group-hover:opacity-100 whitespace-nowrap"
+            tabIndex={-1}
+          >
+            READ MORE
+          </button>
+        </Link>
       </div>
       {/* Title */}
       <div className="w-full flex flex-col items-start px-4 pt-4 pb-2">

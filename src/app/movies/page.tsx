@@ -22,7 +22,7 @@ export default async function MoviesPage() {
   // Fetch top-rated movies from the database using the MovieService
   // This is a server-side data fetch that happens at build time or request time
   // The limit of 10 movies provides a focused selection of the best content
-  const result = await MovieService.getTopRatedMovies(10)
+  const result = await MovieService.getTopRatedMovies(20)
 
   // Handle error cases
   if (!result.success || result.error) {

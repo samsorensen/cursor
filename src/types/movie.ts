@@ -24,6 +24,7 @@ export interface Movie {
   title: string
   overview: string
   releaseDate: Date
+  popularity: number
   voteAverage: number
   voteCount: number
   posterPath?: string | null
