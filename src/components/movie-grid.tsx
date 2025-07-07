@@ -3,7 +3,6 @@ import { Movie } from "@/types/movie"
 
 interface MovieGridProps {
   movies: Movie[]
-  highlightGenre?: string
   emptyMessage?: string
   showCount?: boolean
   countLabel?: string
@@ -11,7 +10,6 @@ interface MovieGridProps {
 
 export function MovieGrid({ 
   movies, 
-  highlightGenre, 
   emptyMessage = "No movies found.",
   showCount = false,
   countLabel
@@ -31,7 +29,6 @@ export function MovieGrid({
           <MovieCard 
             key={movie.id} 
             movie={movie} 
-            highlightGenre={highlightGenre}
           />
         ))}
       </div>

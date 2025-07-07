@@ -1,103 +1,55 @@
-import { Badge } from "@/components/ui/badge"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Movie } from "@/types/movie"
-import { Star, Film } from "lucide-react"
 import Image from "next/image"
+import { Star } from "lucide-react"
+import { Movie } from "@/types/movie"
 
 interface MovieCardProps {
   movie: Movie
-  highlightGenre?: string
 }
 
-export function MovieCard({ movie, highlightGenre }: MovieCardProps) {
-  const posterUrl = movie.posterPath 
+export function MovieCard({ movie }: MovieCardProps) {
+  const posterUrl = movie.posterPath
     ? `https://image.tmdb.org/t/p/w500${movie.posterPath}`
     : null
 
   return (
-    <Card className="bg-slate-800/50 border-slate-700 text-white hover:bg-slate-800/70 transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/10 group overflow-hidden">
-      {/* Movie Poster */}
-      <div className="relative aspect-[2/3] overflow-hidden">
+    <div className="bg-[#101926] rounded-xl overflow-hidden shadow-lg flex flex-col items-center p-0 w-full group cursor-pointer">
+      {/* Poster with hover overlay and button */}
+      <div className="relative w-full aspect-[2/3] flex items-center justify-center">
         {posterUrl ? (
           <Image
             src={posterUrl}
             alt={`${movie.title} poster`}
             fill
-            className="object-cover group-hover:scale-105 transition-transform duration-300"
+            className="object-cover"
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           />
         ) : (
-          <div className="w-full h-full bg-gradient-to-br from-slate-700 to-slate-800 flex items-center justify-center">
-            <Film className="h-12 w-12 text-slate-500" />
-          </div>
+          <div className="w-full h-full bg-gradient-to-br from-slate-700 to-slate-800 flex items-center justify-center" />
         )}
-        {/* Rating Badge */}
-        <div className="absolute top-2 right-2 bg-black/70 backdrop-blur-sm rounded-full px-2 py-1 flex items-center gap-1">
-          <Star className="h-3 w-3 text-yellow-400 fill-current" />
-          <span className="text-xs font-medium text-white">{movie.voteAverage.toFixed(1)}</span>
+        {/* Dark overlay on hover */}
+        <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10" />
+        {/* READ MORE Button on hover */}
+        <button
+          className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-[#f20034] hover:bg-[#d1002d] text-white font-bold rounded-full px-8 py-3 text-base shadow-lg transition-all duration-200 z-20 tracking-wide opacity-0 group-hover:opacity-100 whitespace-nowrap"
+          tabIndex={-1}
+        >
+          READ MORE
+        </button>
+      </div>
+      {/* Title */}
+      <div className="w-full flex flex-col items-start px-4 pt-4 pb-2">
+        <span className="text-[#E6E93A] text-base font-extrabold uppercase tracking-wide leading-tight mb-2">
+          {movie.title}
+        </span>
+        {/* Rating */}
+        <div className="flex items-center gap-2 mb-2">
+          <Star className="h-6 w-6 text-yellow-400 fill-yellow-400 mr-1" />
+          <span className="text-2xl font-bold text-white">
+            {movie.voteAverage.toFixed(3)}
+          </span>
+          <span className="text-base text-slate-400 font-medium">/10</span>
         </div>
       </div>
-
-      <CardHeader className="pb-3">
-        <CardTitle className="text-lg font-semibold text-white group-hover:text-blue-300 transition-colors line-clamp-2">
-          {movie.title}
-        </CardTitle>
-        <div className="flex items-center gap-2 text-sm text-slate-400">
-          <span>{movie.releaseDate.toLocaleDateString()}</span>
-          <span>•</span>
-          <span className="text-slate-500">({movie.voteCount} votes)</span>
-        </div>
-      </CardHeader>
-      
-      <CardContent className="space-y-4">
-        <p className="text-sm text-slate-300 line-clamp-3 leading-relaxed">
-          {movie.overview}
-        </p>
-        
-        {movie.genres.length > 0 && (
-          <div className="space-y-2">
-            <span className="text-xs font-medium text-slate-400 uppercase tracking-wide">Genres</span>
-            <div className="flex flex-wrap gap-1">
-              {movie.genres.map(({ genre }) => (
-                <Badge
-                  key={genre.id}
-                  variant="secondary"
-                  className={
-                    highlightGenre && genre.name === highlightGenre
-                      ? 'bg-purple-500/20 text-purple-300 border-purple-500/30 hover:bg-purple-500/30'
-                      : 'bg-blue-500/20 text-blue-300 border-blue-500/30 hover:bg-blue-500/30'
-                  }
-                >
-                  {genre.name}
-                </Badge>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {movie.directors.length > 0 && (
-          <div className="space-y-1">
-            <span className="text-xs font-medium text-slate-400 uppercase tracking-wide">
-              Director{movie.directors.length > 1 ? 's' : ''}
-            </span>
-            <p className="text-sm text-slate-300">
-              {movie.directors.map(({ director }) => director.name).join(', ')}
-            </p>
-          </div>
-        )}
-
-        {movie.actors.length > 0 && (
-          <div className="space-y-1">
-            <span className="text-xs font-medium text-slate-400 uppercase tracking-wide">Cast</span>
-            <p className="text-sm text-slate-300">
-              {movie.actors.slice(0, 3).map(({ actor }) => actor.name).join(', ')}
-              {movie.actors.length > 3 && (
-                <span className="text-slate-500"> +{movie.actors.length - 3} more</span>
-              )}
-            </p>
-          </div>
-        )}
-      </CardContent>
-    </Card>
+    </div>
   )
 } 
