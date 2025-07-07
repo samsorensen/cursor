@@ -1,31 +1,23 @@
-import Image from "next/image"
 import { Star } from "lucide-react"
 import { Movie } from "@/types/movie"
+import { SecureImage } from "./secure-image"
 
 interface MovieCardProps {
   movie: Movie
 }
 
 export function MovieCard({ movie }: MovieCardProps) {
-  const posterUrl = movie.posterPath
-    ? `https://image.tmdb.org/t/p/w500${movie.posterPath}`
-    : null
-
   return (
     <div className="bg-[#101926] rounded-xl overflow-hidden shadow-lg flex flex-col items-center p-0 w-full group cursor-pointer">
       {/* Poster with hover overlay and button */}
       <div className="relative w-full aspect-[2/3] flex items-center justify-center">
-        {posterUrl ? (
-          <Image
-            src={posterUrl}
-            alt={`${movie.title} poster`}
-            fill
-            className="object-cover"
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-          />
-        ) : (
-          <div className="w-full h-full bg-gradient-to-br from-slate-700 to-slate-800 flex items-center justify-center" />
-        )}
+        <SecureImage
+          src={movie.posterPath}
+          alt={`${movie.title} poster`}
+          fill
+          className="object-cover"
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+        />
         {/* Dark overlay on hover */}
         <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10" />
         {/* READ MORE Button on hover */}

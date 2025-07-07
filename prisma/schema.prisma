@@ -28,6 +28,9 @@ model Movie {
   directors     MovieDirector[]
   
   @@map("movies")
+  @@index([voteAverage(sort: Desc)])
+  @@index([releaseDate(sort: Desc)])
+  @@index([popularity(sort: Desc)])
 }
 
 model Genre {
@@ -38,6 +41,7 @@ model Genre {
   movies  MovieGenre[]
   
   @@map("genres")
+  @@index([name])
 }
 
 model Actor {
@@ -48,6 +52,7 @@ model Actor {
   movies  MovieActor[]
   
   @@map("actors")
+  @@index([name])
 }
 
 model Director {
@@ -58,6 +63,7 @@ model Director {
   movies  MovieDirector[]
   
   @@map("directors")
+  @@index([name])
 }
 
 // Junction tables for many-to-many relationships
@@ -70,6 +76,8 @@ model MovieGenre {
   
   @@id([movieId, genreId])
   @@map("movie_genres")
+  @@index([movieId])
+  @@index([genreId])
 }
 
 model MovieActor {
@@ -81,6 +89,8 @@ model MovieActor {
   
   @@id([movieId, actorId])
   @@map("movie_actors")
+  @@index([movieId])
+  @@index([actorId])
 }
 
 model MovieDirector {
@@ -92,4 +102,6 @@ model MovieDirector {
   
   @@id([movieId, directorId])
   @@map("movie_directors")
+  @@index([movieId])
+  @@index([directorId])
 }
