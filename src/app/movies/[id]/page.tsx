@@ -4,7 +4,7 @@ import { MovieCard } from '@/components/movie-card'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { ArrowLeft, Calendar, Star, Users, TrendingUp, Film, Award } from 'lucide-react'
+import { ArrowLeft, Calendar, Star, Users, TrendingUp, Film, Award, Edit } from 'lucide-react'
 import Link from 'next/link'
 import { headers } from 'next/headers'
 
@@ -48,8 +48,8 @@ export default async function MovieDetailPage({ params }: MovieDetailPageProps) 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
       <div className="container mx-auto px-4 py-8">
-        {/* Back Navigation */}
-        <div className="mb-8">
+        {/* Back Navigation and Actions */}
+        <div className="mb-8 flex justify-between items-center">
           <Link href={backUrl}>
             <Button 
               variant="outline" 
@@ -59,14 +59,23 @@ export default async function MovieDetailPage({ params }: MovieDetailPageProps) 
               {backText}
             </Button>
           </Link>
+          
+          <Link href={`/movies/${movieId}/edit`}>
+            <Button 
+              className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white transition-all duration-200"
+            >
+              <Edit className="h-4 w-4" />
+              Edit Movie
+            </Button>
+          </Link>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Movie Poster and Basic Info */}
           <div className="lg:col-span-1">
             <div className="sticky top-8">
-              <div className="transform hover:scale-105 transition-transform duration-300">
-                <MovieCard movie={movie} />
+              <div>
+                <MovieCard movie={movie} disableHover={true} />
               </div>
             </div>
           </div>
@@ -88,7 +97,7 @@ export default async function MovieDetailPage({ params }: MovieDetailPageProps) 
             {/* Statistics */}
             <Card className="bg-slate-800/50 border-slate-700 backdrop-blur-sm shadow-xl">
               <CardHeader className="pb-4">
-                <CardTitle className="flex items-center gap-2 text-xl">
+                <CardTitle className="flex items-center gap-2 text-xl text-white">
                   <Film className="h-5 w-5 text-blue-400" />
                   Movie Statistics
                 </CardTitle>
@@ -144,10 +153,10 @@ export default async function MovieDetailPage({ params }: MovieDetailPageProps) 
             {movie.genres.length > 0 && (
               <Card className="bg-slate-800/50 border-slate-700 backdrop-blur-sm shadow-xl">
                 <CardHeader className="pb-4">
-                  <CardTitle className="flex items-center gap-2 text-xl">
-                    <Award className="h-5 w-5 text-amber-400" />
-                    Genres
-                  </CardTitle>
+                                  <CardTitle className="flex items-center gap-2 text-xl text-white">
+                  <Award className="h-5 w-5 text-amber-400" />
+                  Genres
+                </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="flex flex-wrap gap-3">
@@ -169,7 +178,7 @@ export default async function MovieDetailPage({ params }: MovieDetailPageProps) 
             {movie.actors.length > 0 && (
               <Card className="bg-slate-800/50 border-slate-700 backdrop-blur-sm shadow-xl">
                 <CardHeader className="pb-4">
-                  <CardTitle className="text-xl">Cast</CardTitle>
+                  <CardTitle className="text-xl text-white">Cast</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
@@ -190,7 +199,7 @@ export default async function MovieDetailPage({ params }: MovieDetailPageProps) 
             {movie.directors.length > 0 && (
               <Card className="bg-slate-800/50 border-slate-700 backdrop-blur-sm shadow-xl">
                 <CardHeader className="pb-4">
-                  <CardTitle className="text-xl">Directors</CardTitle>
+                  <CardTitle className="text-xl text-white">Directors</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="grid grid-cols-2 md:grid-cols-3 gap-4">

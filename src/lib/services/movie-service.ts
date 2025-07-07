@@ -411,6 +411,215 @@ export class MovieService {
     return this.getMoviesByGenre('Science Fiction')
   }
 
+  /**
+   * Update a movie's details in the database
+   * This method updates the basic movie information (title, overview, releaseDate, etc.)
+   * Note: This doesn't handle genre, actor, or director relationships - those would need separate methods
+   */
+  static async updateMovie(
+    movieId: number,
+    updateData: {
+      title?: string
+      overview?: string
+      releaseDate?: Date
+      popularity?: number
+      voteAverage?: number
+      voteCount?: number
+      posterPath?: string | null
+      backdropPath?: string | null
+    }
+  ): Promise<ServiceResult<Movie | null>> {
+    try {
+      // Input validation
+      if (!movieId || movieId <= 0) {
+        return {
+          data: null,
+          error: new ValidationError(
+            'Movie ID must be a positive integer',
+            'INVALID_MOVIE_ID',
+            { providedId: movieId }
+          ),
+          success: false
+        }
+      }
+
+      // Validate update data
+      if (updateData.title !== undefined && (!updateData.title || updateData.title.trim().length === 0)) {
+        return {
+          data: null,
+          error: new ValidationError(
+            'Movie title cannot be empty',
+            'INVALID_TITLE',
+            { providedTitle: updateData.title }
+          ),
+          success: false
+        }
+      }
+
+      if (updateData.overview !== undefined && (!updateData.overview || updateData.overview.trim().length === 0)) {
+        return {
+          data: null,
+          error: new ValidationError(
+            'Movie overview cannot be empty',
+            'INVALID_OVERVIEW',
+            { providedOverview: updateData.overview }
+          ),
+          success: false
+        }
+      }
+
+      if (updateData.voteAverage !== undefined && (updateData.voteAverage < 0 || updateData.voteAverage > 10)) {
+        return {
+          data: null,
+          error: new ValidationError(
+            'Vote average must be between 0 and 10',
+            'INVALID_VOTE_AVERAGE',
+            { providedVoteAverage: updateData.voteAverage }
+          ),
+          success: false
+        }
+      }
+
+      if (updateData.voteCount !== undefined && updateData.voteCount < 0) {
+        return {
+          data: null,
+          error: new ValidationError(
+            'Vote count cannot be negative',
+            'INVALID_VOTE_COUNT',
+            { providedVoteCount: updateData.voteCount }
+          ),
+          success: false
+        }
+      }
+
+      if (updateData.popularity !== undefined && updateData.popularity < 0) {
+        return {
+          data: null,
+          error: new ValidationError(
+            'Popularity cannot be negative',
+            'INVALID_POPULARITY',
+            { providedPopularity: updateData.popularity }
+          ),
+          success: false
+        }
+      }
+
+      // Check if movie exists
+      const existingMovie = await db.movie.findUnique({
+        where: { id: movieId }
+      })
+
+      if (!existingMovie) {
+        return {
+          data: null,
+          error: new ValidationError(
+            'Movie not found',
+            'MOVIE_NOT_FOUND',
+            { movieId }
+          ),
+          success: false
+        }
+      }
+
+      // Prepare update data (only include defined fields)
+      const dataToUpdate: any = {}
+      
+      if (updateData.title !== undefined) {
+        dataToUpdate.title = updateData.title.trim()
+      }
+      if (updateData.overview !== undefined) {
+        dataToUpdate.overview = updateData.overview.trim()
+      }
+      if (updateData.releaseDate !== undefined) {
+        dataToUpdate.releaseDate = updateData.releaseDate
+      }
+      if (updateData.popularity !== undefined) {
+        dataToUpdate.popularity = updateData.popularity
+      }
+      if (updateData.voteAverage !== undefined) {
+        dataToUpdate.voteAverage = updateData.voteAverage
+      }
+      if (updateData.voteCount !== undefined) {
+        dataToUpdate.voteCount = updateData.voteCount
+      }
+      if (updateData.posterPath !== undefined) {
+        dataToUpdate.posterPath = updateData.posterPath
+      }
+      if (updateData.backdropPath !== undefined) {
+        dataToUpdate.backdropPath = updateData.backdropPath
+      }
+
+      // Update the movie
+      const updatedMovie = await db.movie.update({
+        where: { id: movieId },
+        data: dataToUpdate,
+        select: {
+          id: true,
+          title: true,
+          overview: true,
+          releaseDate: true,
+          popularity: true,
+          voteAverage: true,
+          voteCount: true,
+          posterPath: true,
+          backdropPath: true,
+          genres: {
+            select: {
+              genre: {
+                select: {
+                  id: true,
+                  name: true
+                }
+              }
+            }
+          },
+          actors: {
+            select: {
+              actor: {
+                select: {
+                  id: true,
+                  name: true
+                }
+              }
+            }
+          },
+          directors: {
+            select: {
+              director: {
+                select: {
+                  id: true,
+                  name: true
+                }
+              }
+            }
+          }
+        }
+      })
+
+      return {
+        data: updatedMovie,
+        error: null,
+        success: true
+      }
+    } catch (error) {
+      console.error('Error updating movie:', error)
+      
+      return {
+        data: null,
+        error: new DatabaseError(
+          'Failed to update movie',
+          'UPDATE_MOVIE_ERROR',
+          { 
+            movieId,
+            updateData,
+            originalError: error instanceof Error ? error.message : String(error) 
+          }
+        ),
+        success: false
+      }
+    }
+  }
+
   // Helper method to check database connection
   static async checkConnection(): Promise<ServiceResult<boolean>> {
     try {
